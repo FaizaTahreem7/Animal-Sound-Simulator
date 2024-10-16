@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animal Sound Simulator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Reset margins and paddings */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Background */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f0f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Container Styling */
+        .container {
+            margin: 5px;
+            background-color: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        /* Heading */
+        h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #333;
+            letter-spacing: 1px;
+        }
+
+        /* Label */
+        label {
+            font-size: 1.1em;
+            color: #444;
+        }
+
+        /* Select Dropdown Styling */
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #2196F3;
+            border-radius: 10px;
+            font-size: 1.1em;
+            background-color: #f9f9f9;
+            color: #333;
+            transition: border-color 0.3s ease;
+        }
+
+        select:hover {
+            border-color: #1e88e5;
+        }
+
+        /* Play/Pause Button */
+        .play-pause-btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1em;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            letter-spacing: 0.5px;
+        }
+
+        .play-pause-btn:hover {
+            background-color: #1976d2;
+            transform: translateY(-2px);
+        }
+
+        .play-pause-btn:active {
+            background-color: #1565c0;
+            transform: translateY(0);
+        }
+
+        .play-pause-btn i {
+            margin-right: 10px;
+            font-size: 1.5em;
+        }
+
+        /* Feedback message styling */
+        .feedback {
+            margin-top: 10px;
+            color: #555;
+            font-size: 1em;
+            display: none;
+            /* Hide by default */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Animal Sound Simulator</h2>
+
+        <label for="animal">Choose an animal:</label><br>
+        <select id="animal">
+            <option value="dog">Dog</option>
+            <option value="cat">Cat</option>
+            <option value="cow">Cow</option>
+            <option value="lion">Lion</option>
+            <option value="elephant">Elephant</option>
+        </select><br><br>
+
+        <button class="play-pause-btn" onclick="togglePlayPause()">
+            <i id="play-pause-icon" class="fas fa-play"></i> Play Sound
+        </button>
+
+        <div class="feedback" id="feedback"></div>
+    </div>
+
+    <!-- Audio Elements (Hidden) -->
+    <audio id="dogSound" src="dog-barking.mp3"></audio>
+    <audio id="catSound" src="cat.mp3"></audio>
+    <audio id="cowSound" src="cow-sound.mp3"></audio>
+    <audio id="lionSound" src="lion-roars.mp3"></audio>
+    <audio id="elephantSound" src="elephant.mp3"></audio>
+
+    <script>
+        let currentPlayingSound = null; // Keep track of the currently playing sound
+        let isPlaying = false; // Track play/pause state
+
+        function togglePlayPause() {
+            let animal = document.getElementById("animal").value;
+            let feedback = document.getElementById("feedback");
+            let playPauseIcon = document.getElementById("play-pause-icon");
+
+            // If already playing, pause the sound
+            if (isPlaying) {
+                if (currentPlayingSound) {
+                    currentPlayingSound.pause();
+                }
+                playPauseIcon.classList.replace('fa-pause', 'fa-play'); // Change to play icon
+                feedback.style.display = 'none'; // Hide feedback when paused
+                isPlaying = false;
+            } else {
+                // Pause any currently playing sound before starting a new one
+                if (currentPlayingSound) {
+                    currentPlayingSound.pause();
+                    currentPlayingSound.currentTime = 0; // Reset time
+                }
+
+                // Select the correct sound based on the animal
+                switch (animal) {
+                    case "dog":
+                        currentPlayingSound = document.getElementById("dogSound");
+                        feedback.innerHTML = "Dog is barking!";
+                        break;
+                    case "cat":
+                        currentPlayingSound = document.getElementById("catSound");
+                        feedback.innerHTML = "Cat is meowing!";
+                        break;
+                    case "cow":
+                        currentPlayingSound = document.getElementById("cowSound");
+                        feedback.innerHTML = "Cow is mooing!";
+                        break;
+                    case "lion":
+                        currentPlayingSound = document.getElementById("lionSound");
+                        feedback.innerHTML = "Lion is roaring!";
+                        break;
+                    case "elephant":
+                        currentPlayingSound = document.getElementById("elephantSound");
+                        feedback.innerHTML = "Elephant is trumpeting!";
+                        break;
+                    default:
+                        alert("Select a valid animal.");
+                        return;
+                }
+
+                // Play the sound and show feedback
+                if (currentPlayingSound) {
+                    currentPlayingSound.play();
+                    feedback.style.display = 'block';
+                    playPauseIcon.classList.replace('fa-play', 'fa-pause'); // Change to pause icon
+                    isPlaying = true;
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
